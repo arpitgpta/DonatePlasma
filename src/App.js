@@ -5,9 +5,8 @@ import Footer from './Components/Footer'
 import PinCodeInput from './Components/PincodeInput'
 import CityInput from './Components/CityInput'
 import ResultTable from "./Components/ResultTable";
-import red from "@material-ui/core/colors/red";
-
 import { makeStyles } from '@material-ui/core/styles';
+import Register from './Components/Register'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -43,15 +42,7 @@ function App() {
 	const classes = useStyles()
 	return (
 		<div className={classes.root}>
-			<Button
-
-				className={classes.donate}
-				variant="contained"
-			>
-				<span>
-					Donate Plasma
-				</span>
-			</Button>
+			<Register/>
 			<Paper
 				elevation={10}
 				className={classes.searchField}
