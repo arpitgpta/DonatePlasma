@@ -4,7 +4,7 @@ import { Paper, Button, Modal, TextField, Typography, Grid } from "@material-ui/
 import CloseIcon from "@material-ui/icons/Close";
 import SendOTP from './SendOTP';
 import axios from 'axios';
-
+import VarifyOTP from './VarifyOTP'
 
 const useStyles = makeStyles((theme) => ({
     donate: {
@@ -44,21 +44,44 @@ function RegisterPopup(props) {
     }, []);
 
     const [mobileno, setMobileno] = useState("")
-    const [otp, setOtp] = useState(0)
-    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [age, setAge] = useState('')
+    const [sex, setSex] = useState("")
     const [bloodGroup, setBloodGroup] = useState("")
+    const [otp, setOtp] = useState()
+    const [name, setName] = useState("")
     const [pinCode, setPinCode] = useState("")
+    const [newPincode, setNewPincode] = useState("")
     const [otpSent, setOtpSent] = useState(false)
     const [numberVarified, setNumberVarified] = useState(false)
 
     const otpSender = () => {
-        axios.post("/sendOTP", {
-            mobileno : mobileno
+        axios.post("/registerDonor", {
+            Contact: mobileno,
+            FullName: name,
+            Email: email,
+            Age: age,
+            Sex: sex,
+            BloodGroup: bloodGroup,
+            ZipCode: newPincode,
         })
-        .then(response => {
-            console.log(response);
-            setOtpSent(true)
+            .then(response => {
+                console.log(response);
+                setOtpSent(true)
+            })
+    }
+
+    const otpChecker = () => {
+        axios.post('/verifyDonor', {
+            contact: mobileno,
+            code: otp
         })
+            .then(response => {
+                if(response.status === 200)
+                {
+                    setNumberVarified(true)
+                }
+            })
     }
 
     return (
@@ -71,22 +94,39 @@ function RegisterPopup(props) {
             </Button>
 
             {
-                otpSent 
-                ? 
-                    numberVarified 
+                otpSent
                     ?
-                    console.log('somting 1')
+                    numberVarified
+                        ?
+                        <Typography>
+                            Thanks for providing information
+                        </Typography>
+                        :
+                        <VarifyOTP
+                            mobileno={mobileno}
+                            otp={otp}
+                            setOtp={setOtp}
+                            otpChecker={otpChecker}
+                        />
                     :
-                    console.log('somting 2')
-                : 
-                <SendOTP 
-                    mobileno={mobileno} 
-                    setMobileno={setMobileno}
-                    otpSender={otpSender}
-                />
+                    <SendOTP
+                        mobileno={mobileno}
+                        setMobileno={setMobileno}
+                        age={age}
+                        setAge={setAge}
+                        bloodGroup={bloodGroup}
+                        setBloodGroup={setBloodGroup}
+                        sex={sex}
+                        setSex={setSex}
+                        pincode={newPincode}
+                        setPincode={setNewPincode}
+                        name={name}
+                        setName={setName}
+                        email={email}
+                        setEmail={setEmail}
+                        otpSender={otpSender}
+                    />
             }
-
-
         </Paper>
     );
 }

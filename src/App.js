@@ -7,6 +7,7 @@ import CityInput from './Components/CityInput'
 import ResultTable from "./Components/ResultTable";
 import { makeStyles } from '@material-ui/core/styles';
 import Register from './Components/Register'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -37,12 +38,22 @@ const useStyles = makeStyles((theme) => ({
 function App() {
 
 	const [pincode, setPincode] = useState("")
-	const [city, setCity] = useState("")
-
+	const [donorData, setDonorData] = useState({})
 	const classes = useStyles()
+
+	useEffect(()=>{
+		if(pincode.length >= 3)
+		{
+			axios.get('/searchDonor?pincode='+pincode)
+			.then(response =>{
+				console.log(response);
+			})
+		}
+	}, [pincode])
+
 	return (
 		<div className={classes.root}>
-			<Register/>
+			<Register />
 			<Paper
 				elevation={10}
 				className={classes.searchField}
@@ -50,18 +61,13 @@ function App() {
 				<Heading />
 				<Grid container alignItems="center" justify="center">
 					<Grid item xs={6}>
-						<PinCodeInput pincode={pincode} setPincode={setPincode} />
+						<PinCodeInput
+							pincode={pincode}
+							setPincode={setPincode}
+						/>
 					</Grid>
-					{/* <Grid item xs={12} md={1}>
-						<Typography variant="h6" className={classes.OR}>
-							OR
-						</Typography>
-					</Grid>
-					<Grid item item xs={12} md={5}>
-						<CityInput city={city} setCity={setCity} />
-					</Grid> */}
 				</Grid>
-				<ResultTable />
+				<ResultTable donorData={donorData} />
 			</Paper>
 			<Footer />
 		</div>
