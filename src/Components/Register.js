@@ -18,12 +18,13 @@ const useStyles = makeStyles((theme) => ({
     },
     popup: {
         position: "absolute",
-        width: "80%",
+        width: "50%",
         height: "75%",
-        marginLeft: "10%",
+        marginLeft: "25%",
         marginTop: "5%",
         backgroundColor: theme.palette.background.paper,
         marginBottom: "20px",
+        padding: "2rem"
     },
 
 }))
